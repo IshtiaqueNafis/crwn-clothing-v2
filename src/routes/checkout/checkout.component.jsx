@@ -1,34 +1,41 @@
 import React, {useEffect} from 'react';
-import {useDispatch, useSelector} from "react-redux";
-import {addCartItem} from "../../redux/reducer/cartSliceReducer";
+import "./checkout.styles.scss"
+import {useSelector} from "react-redux";
+import CheckoutItem from "../../components/checkout-item/checkout-item.component";
 
 const CheckOut = () => {
-    const {cartItems,cartTotal} = useSelector(state => state.cartState);
-    const dispatch = useDispatch();
+    const {cartItems, cartTotal} = useSelector(state => state.cartState);
+
 
     useEffect(() => {
 
     }, [cartTotal]);
 
     return (
-        <div>
-            {cartItems.map(cart => (
-
-                <div key={cart.id} >
-                    <h1>{cart.name}</h1>
-                    <h2>{cart.price}</h2>
-                    <h2>{cart.quantity}</h2>
-                    <button onClick={()=>{dispatch(addCartItem({product:cart}))}}>INCREASE</button>
-                    <button onClick={()=>{dispatch(addCartItem({product:cart,quantity:-1}))}}>DECREASE</button>
-                    <button onClick={()=>{dispatch(addCartItem({product:cart,quantity:0}))}}>Remove Item</button>
-                    <h3>------------------------------------------</h3>
+        <div className={'checkout-container'}>
+            <div className={'checkout-header'}>
+                <div className={"header-block"}>
+                    <span>Product</span>
                 </div>
-
-
-            ))}
-            <div>
-                total :{cartTotal}
+                <div className={"header-block"}>
+                    <span>Description</span>
+                </div>
+                <div className={"header-block"}>
+                    <span>Quantity</span>
+                </div>
+                <div className={"header-block"}>
+                    <span>Price</span>
+                </div>
+                <div className={"header-block"}>
+                    <span>Remove</span>
+                </div>
             </div>
+            {cartItems.map((cartItem) =>
+                (
+                    <CheckoutItem key={cartItem.id} cartItem={cartItem}/>
+                ))}
+            <span className={'total'}>{cartTotal}</span>
+
         </div>
     );
 };

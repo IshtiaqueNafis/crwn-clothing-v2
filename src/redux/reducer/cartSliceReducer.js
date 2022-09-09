@@ -30,11 +30,7 @@ export const cartSlice = createSlice({
                         } : cartItem
                     ).map(cart => cart.quantity <= 0 ? {} : {...cart})
                         .filter(element => {
-                                if (Object.keys(element).length !== 0) {
-                                    return true;
-                                }
-
-                                return false;
+                                return Object.keys(element).length !== 0;
                             }
                         )
 
