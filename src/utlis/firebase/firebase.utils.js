@@ -3,13 +3,14 @@ import {
     createUserWithEmailAndPassword,
     getAuth,
     GoogleAuthProvider,
+    onAuthStateChanged,
     signInWithEmailAndPassword,
     signInWithPopup,
     signInWithRedirect,
     signOut,
-    onAuthStateChanged
 } from "firebase/auth";
-import {doc, getDoc, getFirestore, setDoc,collection,writeBatch} from "firebase/firestore";
+import {collection, doc, getDoc, getDocs, getFirestore, query, setDoc, writeBatch,where} from "firebase/firestore";
+import capitalize from "capitalize-first-letter"
 
 
 const firebaseConfig = {
@@ -82,23 +83,43 @@ export const createAuthUserWithEmailAndPassword = async (email, password) => {
     return createUserWithEmailAndPassword(auth, email, password)
 };
 
-export const signOutUser =  () =>  signOut(auth);
+export const signOutUser = () => signOut(auth);
 
-export const onAuthStateChangeListener = (callback) =>{
+export const onAuthStateChangeListener = (callback) => {
     onAuthStateChanged(auth, callback);
 
 }
 
 //region *** addCollectionDocuments -->seed firebase data ***
-export const addCollectionDocuments = async (collectionKey,objectsToAdd)=>{
+export const addCollectionDocuments = async (collectionKey, objectsToAdd) => {
     const collectionRef = collection(db, collectionKey); // db is the firestore, collectionKey is for the name of the database name.
     const batch = writeBatch(db); // pass the firestore.
 
     for (const object of objectsToAdd) {
-        const docRef = doc(collectionRef,object.title.toLowerCase()); // get the object reference.
+        const docRef = doc(collectionRef, object.title.toLowerCase()); // get the object reference.
         batch.set(docRef, object);
     }
     await batch.commit();
 
 }
 //endregion
+
+export const getCategoriesAndDocuments = async (category = "") => {
+
+    const collectionRef = collection(db, "categories");
+    let q = null;
+    if(category.length>0){
+        q = query(collection(db,"categories"),where("title","==",capitalize(category)))
+    }else {
+        q = query(collectionRef);
+    }
+
+
+
+    const querySnapshot = await getDocs(q)
+    return querySnapshot.docs.reduce((acc, docSnapshot) => {
+        const {title, items} = docSnapshot.data();
+        acc[title.toLowerCase()] = items;
+        return acc;
+    }, {});
+}
