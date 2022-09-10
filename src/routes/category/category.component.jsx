@@ -4,6 +4,7 @@ import {useDispatch, useSelector} from "react-redux";
 import {retrieveCategoryMap} from "../../redux/reducer/categorySliceReducer";
 import ProductCard from "../../components/product-card/product-card.componenet";
 import "./category.styles.scss"
+
 const Category = () => {
     const {category} = useParams();
     const dispatch = useDispatch();
@@ -17,7 +18,10 @@ const Category = () => {
     return (
         <>
             {!loading && (
-                <div className={'category1-container'}>
+                <>
+                <h2 className={"category-title"}>{category.toUpperCase()}</h2>
+                <div className={'category-container'}>
+
                     {
                         Object.keys(categoriesMap).map(title => {
                             const products = categoriesMap[title];
@@ -25,6 +29,7 @@ const Category = () => {
                         })
                     }
                 </div>
+                </>
             )}
         </>
     );
