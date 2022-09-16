@@ -1,7 +1,7 @@
 import {createAsyncThunk, createSlice, isAnyOf} from "@reduxjs/toolkit";
 import {
     createAuthUserWithEmailAndPassword,
-    createUserDocumentFromAuth,
+    createUserDocumentFromAuth, retriveDocumentFromDatabase,
     signInAuthWithEmailAndPassword,
     signOutUser
 } from "../../utlis/firebase/firebase.utils";
@@ -11,13 +11,24 @@ export const signInUser = createAsyncThunk(
     "userSlice/signInUser",
     async ({email, password}, thunkApi) => {
         try {
-           await signInAuthWithEmailAndPassword(email, password);
-
+             await signInAuthWithEmailAndPassword(email, password);
         } catch (e) {
             return thunkApi.rejectWithValue(e);
         }
     });
+export const setUser = createAsyncThunk(
+    "userSlice/setUser",
+    async ({user},thunkAPI)=>{
+        try {
+            const log = await retriveDocumentFromDatabase(user);
+            console.log({log})
+            return log;
 
+        }catch (e) {
+            return thunkAPI.rejectWithValue(e);
+        }
+    }
+)
 
 export const signOutUserAsync = createAsyncThunk(
     "userSlice/signOutUser/",
@@ -35,8 +46,9 @@ export const registerUser = createAsyncThunk(
     async ({email, password, displayName}, thunkApi) => {
 
         try {
-            const {user} = await createAuthUserWithEmailAndPassword(email, password);
-            await createUserDocumentFromAuth(user, {displayName});
+            const userAuth = await signInAuthWithEmailAndPassword(email, password);
+            await createUserDocumentFromAuth(userAuth, {displayName});
+
 
         } catch (e) {
             return thunkApi.rejectWithValue(e.message);
@@ -51,6 +63,11 @@ export const userSlice = createSlice({
         reducers: {},
         extraReducers: builder => {
 
+            builder.addCase(setUser.fulfilled, (state, action) => {
+                state.loading = false;
+                state.currentUser = action.payload;
+                state.error = null;
+            });
             builder.addCase(signOutUserAsync.fulfilled, (state, action) => {
                 state.loading = false;
                 state.error = null;
@@ -64,14 +81,13 @@ export const userSlice = createSlice({
             builder.addCase(signInUser.fulfilled, (state, action) => {
                 state.loading = false;
                 state.error = null;
-                state.currentUser = action.payload;
             });
-            builder.addMatcher(isAnyOf(signInUser.pending, registerUser.pending, signOutUserAsync.pending),
+            builder.addMatcher(isAnyOf(signInUser.pending, registerUser.pending, signOutUserAsync.pending,setUser.pending),
                 (state, action) => {
                     state.loading = true;
                     state.error = null;
                 });
-            builder.addMatcher(isAnyOf(signInUser.rejected, registerUser.rejected, signOutUserAsync.rejected), (state, action) => {
+            builder.addMatcher(isAnyOf(signInUser.rejected, registerUser.rejected, signOutUserAsync.rejected,setUser.rejected), (state, action) => {
                 state.loading = false;
                 state.error = action.payload;
             })

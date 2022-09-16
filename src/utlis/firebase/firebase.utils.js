@@ -9,7 +9,7 @@ import {
     signInWithRedirect,
     signOut,
 } from "firebase/auth";
-import {collection, doc, getDoc, getDocs, getFirestore, query, setDoc, writeBatch,where} from "firebase/firestore";
+import {collection, doc, getDoc, getDocs, getFirestore, query, setDoc, where, writeBatch} from "firebase/firestore";
 import capitalize from "capitalize-first-letter"
 
 
@@ -41,27 +41,34 @@ export const db = getFirestore();
 //endregion
 
 export const createUserDocumentFromAuth = async (userAuth, additionalInformation = {}) => {
-    const userDocRef = doc(db, 'users', userAuth.uid)
 
-    const userSnapshot = await getDoc(userDocRef);
 
-    if (!userSnapshot.exists()) {
-        const {displayName, email} = userAuth;
-        const createdAt = new Date();
+    const {displayName, email} = userAuth;
+    const createdAt = new Date();
 
-        try {
-            await setDoc(userDocRef, {
-                displayName,
-                email,
-                createdAt,
-                ...additionalInformation
-            })
-        } catch (e) {
-            console.log('error creating the user ')
-        }
+    try {
+        await setDoc(userAuth.uid, {
+            displayName,
+            email,
+            createdAt,
+            ...additionalInformation
+        })
+    } catch (e) {
+        console.log('error creating the user ')
     }
 
+
+};
+
+export const retriveDocumentFromDatabase = async (userAuth) => {
+    const userDocRef = doc(db, 'users', userAuth.uid);
+    const userSnapshot = await getDoc(userDocRef);
+    if (!userSnapshot.exists()) {
+        return undefined;
+    }
     return userSnapshot.data();
+
+
 }
 
 export const signInAuthWithEmailAndPassword = async (email, password) => {
@@ -69,7 +76,6 @@ export const signInAuthWithEmailAndPassword = async (email, password) => {
     try {
         return await signInWithEmailAndPassword(auth, email, password);
     } catch (e) {
-        console.log(e);
         throw e.message;
     }
 }
@@ -86,7 +92,7 @@ export const createAuthUserWithEmailAndPassword = async (email, password) => {
 export const signOutUser = () => signOut(auth);
 
 export const onAuthStateChangeListener = (callback) => {
-    onAuthStateChanged(auth, callback);
+    return onAuthStateChanged(auth, callback);
 
 }
 
@@ -108,12 +114,11 @@ export const getCategoriesAndDocuments = async (category = "") => {
 
     const collectionRef = collection(db, "categories");
     let q = null;
-    if(category.length>0){
-        q = query(collection(db,"categories"),where("title","==",capitalize(category)))
-    }else {
+    if (category.length > 0) {
+        q = query(collection(db, "categories"), where("title", "==", capitalize(category)))
+    } else {
         q = query(collectionRef);
     }
-
 
 
     const querySnapshot = await getDocs(q)
