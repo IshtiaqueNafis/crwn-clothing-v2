@@ -1,7 +1,7 @@
 import {createAsyncThunk, createSlice, isAnyOf} from "@reduxjs/toolkit";
 import {
     createAuthUserWithEmailAndPassword,
-    createUserDocumentFromAuth, retriveDocumentFromDatabase,
+    createUserDocumentFromAuth,
     signInAuthWithEmailAndPassword,
     signOutUser
 } from "../../utlis/firebase/firebase.utils";
@@ -11,24 +11,12 @@ export const signInUser = createAsyncThunk(
     "userSlice/signInUser",
     async ({email, password}, thunkApi) => {
         try {
-             await signInAuthWithEmailAndPassword(email, password);
+            await signInAuthWithEmailAndPassword(email, password);
         } catch (e) {
             return thunkApi.rejectWithValue(e);
         }
     });
-export const setUser = createAsyncThunk(
-    "userSlice/setUser",
-    async ({user},thunkAPI)=>{
-        try {
-            const log = await retriveDocumentFromDatabase(user);
-            console.log({log})
-            return log;
 
-        }catch (e) {
-            return thunkAPI.rejectWithValue(e);
-        }
-    }
-)
 
 export const signOutUserAsync = createAsyncThunk(
     "userSlice/signOutUser/",
@@ -43,15 +31,18 @@ export const signOutUserAsync = createAsyncThunk(
 
 export const registerUser = createAsyncThunk(
     'userSlice/registerUser',
-    async ({email, password, displayName}, thunkApi) => {
+    async ({email, password, displayName = ""}, thunkApi) => {
 
         try {
-            const userAuth = await signInAuthWithEmailAndPassword(email, password);
-            await createUserDocumentFromAuth(userAuth, {displayName});
+            const {user} = await createAuthUserWithEmailAndPassword(email, password);
+
+            const resultUser = await createUserDocumentFromAuth(user, {displayName});
+
+
 
 
         } catch (e) {
-            return thunkApi.rejectWithValue(e.message);
+            return thunkApi.rejectWithValue(e);
         }
     }
 );
@@ -60,14 +51,14 @@ export const registerUser = createAsyncThunk(
 export const userSlice = createSlice({
         name: 'UserSlice',
         initialState: {currentUser: {}, loading: false, error: null},
-        reducers: {},
+        reducers: {
+            setUser:(state,action)=>{
+                state.currentUser = action.payload;
+            }
+        },
         extraReducers: builder => {
 
-            builder.addCase(setUser.fulfilled, (state, action) => {
-                state.loading = false;
-                state.currentUser = action.payload;
-                state.error = null;
-            });
+
             builder.addCase(signOutUserAsync.fulfilled, (state, action) => {
                 state.loading = false;
                 state.error = null;
@@ -82,12 +73,12 @@ export const userSlice = createSlice({
                 state.loading = false;
                 state.error = null;
             });
-            builder.addMatcher(isAnyOf(signInUser.pending, registerUser.pending, signOutUserAsync.pending,setUser.pending),
+            builder.addMatcher(isAnyOf(signInUser.pending, registerUser.pending, signOutUserAsync.pending),
                 (state, action) => {
                     state.loading = true;
                     state.error = null;
                 });
-            builder.addMatcher(isAnyOf(signInUser.rejected, registerUser.rejected, signOutUserAsync.rejected,setUser.rejected), (state, action) => {
+            builder.addMatcher(isAnyOf(signInUser.rejected, registerUser.rejected, signOutUserAsync.rejected), (state, action) => {
                 state.loading = false;
                 state.error = action.payload;
             })
@@ -98,4 +89,5 @@ export const userSlice = createSlice({
 );
 
 export const userReducer = userSlice.reducer;
+export const {setUser} = userSlice.actions
 

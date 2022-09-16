@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import {Link, Outlet} from "react-router-dom";
 import {ReactComponent as CrwnLogo} from "../../assests/crown.svg";
 import './navigation.styles.scss'
@@ -11,6 +11,11 @@ const Navigation = () => {
     const dispatch = useDispatch();
     const {currentUser} = useSelector(state => state.userState);
     const {isCartOpen} = useSelector(state => state.cartState);
+    useEffect(() => {
+
+    }, [currentUser])
+
+
     return (
         <>
             <div className='navigation'>

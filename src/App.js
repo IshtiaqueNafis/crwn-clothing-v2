@@ -9,19 +9,19 @@ import {useDispatch} from "react-redux";
 import {useEffect} from "react";
 import {onAuthStateChangeListener} from "./utlis/firebase/firebase.utils";
 import {setUser} from "./redux/reducer/userSliceReducer";
-
+//https://stackoverflow.com/questions/66950349/onauthstatechanged-being-called-too-early
 
 const App = () => {
     const dispatch = useDispatch();
 
-    useEffect(()=>{
+    useEffect(() => {
         const unSubscribe = onAuthStateChangeListener(user => {
             if (user) {
-                dispatch(setUser({user}));
+                dispatch(setUser(user));
             }
         });
-        return unSubscribe;
-    },[dispatch])
+        return () => unSubscribe();
+    }, [dispatch])
 
     return (
         <Routes>

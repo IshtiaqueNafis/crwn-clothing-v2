@@ -23,7 +23,13 @@ const SignUpForm = () => {
     })
 
     const submitForm = async ({email, password, displayName}) => {
-        dispatch(registerUser({email, password, displayName}))
+
+        try {
+            dispatch(registerUser({email, password, displayName}))
+        }catch (e) {
+            console.log(e)
+        }
+
 
     }
 

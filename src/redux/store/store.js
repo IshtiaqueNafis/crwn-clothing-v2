@@ -10,5 +10,5 @@ export const store = configureStore({
         categories: categoryReducer,
         cartState: cartReducer
     },
-    middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(logger)
+    middleware: (getDefaultMiddleware) => getDefaultMiddleware({serializableCheck: false}).concat(logger)
 })
