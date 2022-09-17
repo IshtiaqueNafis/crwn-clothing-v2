@@ -1,40 +1,51 @@
-import {createAsyncThunk, createSlice, isAnyOf} from "@reduxjs/toolkit";
-import PRODUCTS from '../../shop-data.json'
+import {createAsyncThunk, createEntityAdapter, createSelector, createSlice} from "@reduxjs/toolkit";
 import {getCategoriesAndDocuments} from "../../utlis/firebase/firebase.utils";
 
-export const retrieveCategoryMap =createAsyncThunk(
+export const retrieveCategoryMap = createAsyncThunk(
     'category/retriveCategory',
-    async ({category=""},thunkApi)=>{
+    async ({category = ""}, thunkApi) => {
         try {
             return await getCategoriesAndDocuments(category);
-        }catch (e){
+        } catch (e) {
             thunkApi.rejectWithValue(e.message);
         }
     }
-    )
+)
+
+
+
+const categoryAdapter = createEntityAdapter({
+    selectId: category => category.key
+
+
+})
+const myIdExtractor = category => category.title;
 
 
 export const categorySlice = createSlice({
     name: "CategorySlice",
-    initialState: {
-        loading:false,
+    initialState: categoryAdapter.getInitialState({
+        loading: false,
         error: null,
         products: {},
-        categoriesMap:{}
+        categoriesMap: {}
 
-    },
+    }),
     reducers: {},
-    extraReducers: builder=>{
+    extraReducers: builder => {
         builder.addCase(retrieveCategoryMap.fulfilled, (state, action) => {
             state.loading = false;
             state.error = null;
             state.categoriesMap = action.payload;
+            console.log(state.categoriesMap["hats"]);
+            categoryAdapter.setAll(state, action.payload)
+
         });
         builder.addCase(retrieveCategoryMap.rejected, (state, action) => {
             state.loading = false;
             state.error = action.payload;
         });
-        builder.addCase(retrieveCategoryMap.pending,(state)=>{
+        builder.addCase(retrieveCategoryMap.pending, (state) => {
             state.loading = true;
             state.error = null;
         })

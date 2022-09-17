@@ -6,7 +6,7 @@ import {signInDefaultValue, signInSchema} from "../../utlis/form/formData";
 import Button, {BUTTON_TYPE_CLASSES} from "../button/button.component";
 import {signInWithGooglePopup} from "../../utlis/firebase/firebase.utils";
 import {useDispatch} from "react-redux";
-import {signInUser} from "../../redux/reducer/userSliceReducer";
+import {registerUser, signInUser} from "../../redux/reducer/userSliceReducer";
 
 const SignInForm = () => {
     const dispatch = useDispatch()
@@ -18,8 +18,6 @@ const SignInForm = () => {
 
     const signInWithGoogle = async () => {
         const {user} = await signInWithGooglePopup();
-
-
     };
 
 

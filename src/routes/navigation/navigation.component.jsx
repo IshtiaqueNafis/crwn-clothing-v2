@@ -27,7 +27,7 @@ const Navigation = () => {
                         SHOP
                     </Link>
 
-                    {currentUser ? (
+                    {currentUser?.email ? (
                         <span className='nav-link' onClick={() => dispatch(signOutUserAsync())}>
               {' '}
                             SIGN OUT{' '}

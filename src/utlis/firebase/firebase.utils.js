@@ -33,7 +33,7 @@ googleProvider.setCustomParameters({
 })
 
 export const auth = getAuth();
-
+export const user = auth.currentUser;
 //region ***googleprovider***
 export const signInWithGooglePopup = () => signInWithPopup(auth, googleProvider)
 export const signInWithGoogleRedirect = () => signInWithRedirect(auth, googleProvider)
@@ -45,10 +45,11 @@ export const createUserDocumentFromAuth = async (userAuth, additionalInformation
 
     const userDocRef = doc(db, 'users', userAuth.uid);
 
+
     const userSnapshot = await getDoc(userDocRef);
 
     if (!userSnapshot.exists()) {
-        const { displayName, email } = userAuth;
+        const {displayName, email} = userAuth;
         const createdAt = new Date();
 
         try {
@@ -66,15 +67,17 @@ export const createUserDocumentFromAuth = async (userAuth, additionalInformation
     return getDataFromSnapshot(userDocRef);
 
 };
+
+
+
+
 export const getDataFromSnapshot = async (userdocRef) => {
     return (await getDoc(userdocRef)).data();
 
 
-
-
 }
-export const retriveDocumentFromDatabase = async (userAuth) => {
-    const userDocRef = doc(db, 'users', userAuth.uid);
+export const retriveDocumentFromDatabase = async (uid) => {
+    const userDocRef = doc(db, 'users', uid);
     const userSnapshot = await getDoc(userDocRef);
     if (!userSnapshot.exists()) {
         return undefined;

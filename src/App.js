@@ -7,21 +7,30 @@ import CheckOut from "./routes/checkout/checkout.component";
 
 import {useDispatch} from "react-redux";
 import {useEffect} from "react";
-import {onAuthStateChangeListener} from "./utlis/firebase/firebase.utils";
+import {createUserDocumentFromAuth, onAuthStateChangeListener} from "./utlis/firebase/firebase.utils";
 import {setUser} from "./redux/reducer/userSliceReducer";
 //https://stackoverflow.com/questions/66950349/onauthstatechanged-being-called-too-early
 
 const App = () => {
     const dispatch = useDispatch();
-
     useEffect(() => {
-        const unSubscribe = onAuthStateChangeListener(user => {
-            if (user) {
-                dispatch(setUser(user));
-            }
-        });
-        return () => unSubscribe();
+
+           onAuthStateChangeListener( async user => {
+               if (user) {
+
+                   if (user.providerData[0].providerId === "google.com") {
+                       await createUserDocumentFromAuth(user);
+                       dispatch(setUser({uid:user.uid}))
+                   }else {
+                       dispatch(setUser({uid:user.uid}))
+                   }
+               }
+           })
+
+
+
     }, [dispatch])
+
 
     return (
         <Routes>

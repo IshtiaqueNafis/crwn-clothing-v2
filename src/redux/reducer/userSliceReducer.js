@@ -1,10 +1,12 @@
 import {createAsyncThunk, createSlice, isAnyOf} from "@reduxjs/toolkit";
 import {
     createAuthUserWithEmailAndPassword,
-    createUserDocumentFromAuth,
+    db,
+    retriveDocumentFromDatabase,
     signInAuthWithEmailAndPassword,
-    signOutUser
+    signOutUser, user
 } from "../../utlis/firebase/firebase.utils";
+import {doc, setDoc} from "firebase/firestore";
 
 
 export const signInUser = createAsyncThunk(
@@ -31,15 +33,21 @@ export const signOutUserAsync = createAsyncThunk(
 
 export const registerUser = createAsyncThunk(
     'userSlice/registerUser',
-    async ({email, password, displayName = ""}, thunkApi) => {
+    async ({email, password="", displayName = ""}, thunkApi) => {
 
         try {
-            const {user} = await createAuthUserWithEmailAndPassword(email, password);
 
-            const resultUser = await createUserDocumentFromAuth(user, {displayName});
+            const res = await createAuthUserWithEmailAndPassword(email, password);
 
-
-
+            if (!res) {
+                thunkApi.rejectWithValue("email already taken")
+            }
+            const createdAt = new Date();
+            await setDoc(doc(db, "users", res.user.uid), {
+                email,
+                displayName,
+                createdAt
+            })
 
         } catch (e) {
             return thunkApi.rejectWithValue(e);
@@ -47,15 +55,31 @@ export const registerUser = createAsyncThunk(
     }
 );
 
+export const setUser = createAsyncThunk(
+    "userslice/setUser",
+    async ({uid}, thunkApi) => {
+
+
+        try {
+            return await retriveDocumentFromDatabase(uid);
+        } catch (e) {
+
+        }
+
+    }, {
+        condition: () => {
+            if (!user) {
+                return;
+            }
+        }
+    }
+)
+
 
 export const userSlice = createSlice({
         name: 'UserSlice',
         initialState: {currentUser: {}, loading: false, error: null},
-        reducers: {
-            setUser:(state,action)=>{
-                state.currentUser = action.payload;
-            }
-        },
+        reducers: {},
         extraReducers: builder => {
 
 
@@ -64,7 +88,11 @@ export const userSlice = createSlice({
                 state.error = null;
                 state.currentUser = null;
             });
-
+            builder.addCase(setUser.fulfilled,(state,action)=>{
+                state.loading = false;
+                state.currentUser = action.payload;
+                state.error = null;
+            })
             builder.addCase(registerUser.fulfilled, (state, action) => {
                 state.loading = false;
                 state.error = null;
@@ -89,5 +117,5 @@ export const userSlice = createSlice({
 );
 
 export const userReducer = userSlice.reducer;
-export const {setUser} = userSlice.actions
+
 
