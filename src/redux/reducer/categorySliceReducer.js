@@ -5,7 +5,11 @@ export const retrieveCategoryMap = createAsyncThunk(
     'category/retriveCategory',
     async ({category = ""}, thunkApi) => {
         try {
-            return await getCategoriesAndDocuments(category);
+           const {data2}= await getCategoriesAndDocuments(category);
+           const {data}= await getCategoriesAndDocuments(category);
+
+
+            return {data,data2};
         } catch (e) {
             thunkApi.rejectWithValue(e.message);
         }
@@ -15,11 +19,14 @@ export const retrieveCategoryMap = createAsyncThunk(
 
 
 const categoryAdapter = createEntityAdapter({
-    selectId: category => category.key
+    selectId: category => category.categoryId
+
+
 
 
 })
-const myIdExtractor = category => category.title;
+
+
 
 
 export const categorySlice = createSlice({
@@ -36,9 +43,8 @@ export const categorySlice = createSlice({
         builder.addCase(retrieveCategoryMap.fulfilled, (state, action) => {
             state.loading = false;
             state.error = null;
-            state.categoriesMap = action.payload;
-            console.log(state.categoriesMap["hats"]);
-            categoryAdapter.setAll(state, action.payload)
+            state.categoriesMap =action.payload.data2
+            categoryAdapter.setAll(state,action.payload.data)
 
         });
         builder.addCase(retrieveCategoryMap.rejected, (state, action) => {
@@ -52,3 +58,6 @@ export const categorySlice = createSlice({
     }
 })
 export const categoryReducer = categorySlice.reducer;
+
+export const categorySelector = categoryAdapter.getSelectors(state => state.categories);
+

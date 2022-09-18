@@ -1,7 +1,7 @@
 import React, {useEffect} from 'react';
 import {useParams} from "react-router-dom";
 import {useDispatch, useSelector} from "react-redux";
-import {retrieveCategoryMap} from "../../redux/reducer/categorySliceReducer";
+import {categorySelector, retrieveCategoryMap} from "../../redux/reducer/categorySliceReducer";
 import ProductCard from "../../components/product-card/product-card.componenet";
 import "./category.styles.scss"
 
@@ -9,6 +9,8 @@ const Category = () => {
     const {category} = useParams();
     const dispatch = useDispatch();
     const {categoriesMap, loading} = useSelector(state => state.categories);
+    const categoryProduct = useSelector(state => categorySelector.selectById(state, category));
+    console.log({categoryProduct})
 
     useEffect(() => {
         dispatch(retrieveCategoryMap({category}))
