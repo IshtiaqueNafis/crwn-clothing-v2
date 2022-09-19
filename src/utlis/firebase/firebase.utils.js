@@ -11,7 +11,6 @@ import {
 } from "firebase/auth";
 import {collection, doc, getDoc, getDocs, getFirestore, query, setDoc, where, writeBatch} from "firebase/firestore";
 import capitalize from "capitalize-first-letter"
-import {logger} from "redux-logger/src";
 
 
 const firebaseConfig = {
@@ -139,15 +138,5 @@ export const getCategoriesAndDocuments = async (category = "") => {
 
 
     const querySnapshot = await getDocs(q)
-    const data= querySnapshot.docs.map(doc=>({ data:doc.data().items, categoryId:doc.data().title.toLowerCase() }));
-
-
-
-
-    const data2= querySnapshot.docs.reduce((acc, docSnapshot) => {
-        const {title, items} = docSnapshot.data();
-        acc[title.toLowerCase()] = items;
-        return acc;
-    }, {});
-    return {data, data2};
+    return  querySnapshot.docs.map(doc => ({data: doc.data().items, categoryId: doc.data().title.toLowerCase()}));
 }

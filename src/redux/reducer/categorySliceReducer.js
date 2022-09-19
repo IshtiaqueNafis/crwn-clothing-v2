@@ -1,15 +1,14 @@
-import {createAsyncThunk, createEntityAdapter, createSelector, createSlice} from "@reduxjs/toolkit";
+import {createAsyncThunk, createEntityAdapter, createSlice} from "@reduxjs/toolkit";
 import {getCategoriesAndDocuments} from "../../utlis/firebase/firebase.utils";
 
 export const retrieveCategoryMap = createAsyncThunk(
     'category/retriveCategory',
     async ({category = ""}, thunkApi) => {
         try {
-           const {data2}= await getCategoriesAndDocuments(category);
-           const {data}= await getCategoriesAndDocuments(category);
+
+            return await getCategoriesAndDocuments(category);
 
 
-            return {data,data2};
         } catch (e) {
             thunkApi.rejectWithValue(e.message);
         }
@@ -40,11 +39,12 @@ export const categorySlice = createSlice({
     }),
     reducers: {},
     extraReducers: builder => {
-        builder.addCase(retrieveCategoryMap.fulfilled, (state, action) => {
+        builder.addCase(retrieveCategoryMap.fulfilled, (state, {payload}) => {
+
             state.loading = false;
             state.error = null;
-            state.categoriesMap =action.payload.data2
-            categoryAdapter.setAll(state,action.payload.data)
+            categoryAdapter.setAll(state,payload)
+
 
         });
         builder.addCase(retrieveCategoryMap.rejected, (state, action) => {

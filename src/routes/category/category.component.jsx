@@ -8,33 +8,39 @@ import "./category.styles.scss"
 const Category = () => {
     const {category} = useParams();
     const dispatch = useDispatch();
-    const {categoriesMap, loading} = useSelector(state => state.categories);
+    const {loading} = useSelector(state => state.categories);
+    console.log({category})
     const categoryProduct = useSelector(state => categorySelector.selectById(state, category));
     console.log({categoryProduct})
 
     useEffect(() => {
-        dispatch(retrieveCategoryMap({category}))
+        
+        if(!categoryProduct) {
 
-    }, [dispatch, category])
+        dispatch(retrieveCategoryMap({category}))
+        }
+
+    }, [dispatch, category, categoryProduct])
+
+    if (loading) return <div>loading</div>
 
     return (
-        <>
-            {!loading && (
+
                 <>
                 <h2 className={"category-title"}>{category.toUpperCase()}</h2>
                 <div className={'category-container'}>
 
-                    {
-                        Object.keys(categoriesMap).map(title => {
-                            const products = categoriesMap[title];
-                            return products.map(product => <ProductCard key={product.id} product={product}/>)
-                        })
-                    }
+                    {categoryProduct?.data.map(product=>(
+                        <ProductCard key={product.id} product={product}/>
+                    ))}
+
                 </div>
-                </>
-            )}
+
         </>
-    );
+
+
+
+    )
 };
 
 export default Category;
