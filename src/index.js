@@ -8,6 +8,8 @@ import {Provider} from "react-redux";
 import {store} from "./redux/store/store";
 import {persistStore} from "redux-persist";
 import {PersistGate} from "redux-persist/integration/react";
+import {Elements} from "@stripe/react-stripe-js";
+import {stripePromise} from "./utlis/stripe/stripe.utils";
 
 let persist = persistStore(store);
 
@@ -16,7 +18,10 @@ ReactDOM.render(
         <BrowserRouter>
             <Provider store={store}>
                 <PersistGate loading={null} persistor={persist}>
-                    <App/>
+                    <Elements stripe={stripePromise}>
+
+                        <App/>
+                    </Elements>
                 </PersistGate>
             </Provider>
         </BrowserRouter>
@@ -24,7 +29,5 @@ ReactDOM.render(
     document.getElementById('root')
 );
 
-// If you want to start measuring performance in your app, pass a function
-// to log results (for example: reportWebVitals(console.log))
-// or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
+
 reportWebVitals();

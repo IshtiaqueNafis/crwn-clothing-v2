@@ -25,7 +25,12 @@ export const cartSlice = createSlice({
             state.isCartOpen = !state.isCartOpen;
 
         },
+        resetState: (state) => {
+            state.cartCount = 0;
+            state.cartTotal = 0;
+            cartAdapter.removeAll(state);
 
+        },
 
         addCartItem: (state, action) => {
 
@@ -60,7 +65,7 @@ export const cartSlice = createSlice({
 
 export const cartReducer = cartSlice.reducer;
 
-export const {setCartOpen, addCartItem} = cartSlice.actions;
+export const {setCartOpen, addCartItem, resetState} = cartSlice.actions;
 
 
 
