@@ -17,13 +17,13 @@ const CheckoutItem = ({cartItem}) => {
                 &#10094;
             </div>
             <span className={'value'}>{quantity}</span>
-            <div className={'arrow'} onClick={() => dispatch(addCartItem({product: cartItem}))}>
+            <div className={'arrow'} onClick={() => dispatch(addCartItem({product: cartItem, quantity: 1}))}>
                 &#10095;
             </div>
             </span>
 
             <span className={'price'}>{price}</span>
-            <div className={'remove-button'} onClick={() => dispatch(addCartItem({product: cartItem, quantity: 0}))}>
+            <div className={'remove-button'} onClick={() => dispatch(addCartItem({product: cartItem, quantity: 0}))}  >
                 &#10005;
             </div>
         </div>

@@ -2,14 +2,15 @@ import React, {useEffect} from 'react';
 import "./checkout.styles.scss"
 import {useSelector} from "react-redux";
 import CheckoutItem from "../../components/checkout-item/checkout-item.component";
+import {selectAllCartProducts} from "../../redux/reducer/cartSliceReducer";
 
 const CheckOut = () => {
-    const {cartItems, cartTotal} = useSelector(state => state.cartState);
-
+    const {cartTotal} = useSelector(state => state.carts);
+    const cartItems = useSelector(selectAllCartProducts);
 
     useEffect(() => {
 
-    }, [cartTotal]);
+    }, [cartTotal])
 
     return (
         <div className={'checkout-container'}>

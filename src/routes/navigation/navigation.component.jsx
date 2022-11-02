@@ -10,7 +10,7 @@ import CartDropDown from "../../components/cart-dropdown/cart-dropdown.component
 const Navigation = () => {
     const dispatch = useDispatch();
     const {currentUser} = useSelector(state => state.userState);
-    const {isCartOpen} = useSelector(state => state.cartState);
+    const {isCartOpen} = useSelector(state => state.carts);
     useEffect(() => {
 
     }, [currentUser])

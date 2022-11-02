@@ -8,7 +8,7 @@ export const store = configureStore({
     reducer: {
         userState: userReducer,
         categories: categoryReducer,
-        cartState: cartReducer
+        carts: cartReducer
     },
     middleware: (getDefaultMiddleware) => getDefaultMiddleware({serializableCheck: false}).concat(logger)
 })

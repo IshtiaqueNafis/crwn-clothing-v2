@@ -6,7 +6,7 @@ import {useDispatch, useSelector} from "react-redux";
 
 const CartIcon = () => {
     const dispatch = useDispatch();
-    const {cartCount} = useSelector(state => state.cartState);
+    const {cartCount} = useSelector(state => state.carts);
 
     useEffect(() => {
     }, [cartCount])

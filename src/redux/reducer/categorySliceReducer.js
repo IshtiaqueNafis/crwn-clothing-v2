@@ -29,7 +29,7 @@ const categoryAdapter = createEntityAdapter({
 
 
 export const categorySlice = createSlice({
-    name: "CategorySlice",
+    name: "categories",
     initialState: categoryAdapter.getInitialState({
         loading: false,
         error: null,
