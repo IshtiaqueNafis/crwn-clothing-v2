@@ -1,7 +1,12 @@
 import './directory-item.styles.scss'
-
-const DirectoryItem = ({ category }) => {
-    const { imageUrl, title } = category;
+import {Link} from "react-router-dom";
+/*
+  <Link className='nav-link' to='/shop'>
+                        SHOP
+                    </Link>
+ */
+const DirectoryItem = ({category}) => {
+    const {imageUrl, title} = category;
     return (
         <div className='directory-item-container'>
             <div
@@ -11,8 +16,8 @@ const DirectoryItem = ({ category }) => {
                 }}
             />
             <div className='body'>
-                <h2>{title}</h2>
-                <p>Shop Now</p>
+                <h2>{title.toUpperCase()}</h2>
+                <Link to={`/shop/${title}`}>Shop Now</Link>
             </div>
         </div>
     );

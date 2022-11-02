@@ -1,10 +1,10 @@
 import React from 'react';
-import "./cart-dropdown.styles.scss"
 import Button from "../button/button.component";
 import {useNavigate} from "react-router-dom";
 import {useSelector} from "react-redux";
 import CartItem from "../cart-item/cart-item.component";
 import {selectAllCartProducts} from "../../redux/reducer/cartSliceReducer";
+import "./cart-dropdown.styles.scss"
 
 
 const CartDropDown = () => {
@@ -14,7 +14,7 @@ const CartDropDown = () => {
         navigate("/checkout");
     }
     const cartItems = useSelector(selectAllCartProducts);
-    console.log(cartItems)
+
     return (
         <div className='cart-dropdown-container'>
             <div className='cart-items'>

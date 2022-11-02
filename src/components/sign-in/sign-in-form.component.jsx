@@ -3,10 +3,11 @@ import {useForm} from "react-hook-form";
 import FormInput from "../form-input/form-input.component";
 import {yupResolver} from "@hookform/resolvers/yup";
 import {signInDefaultValue, signInSchema} from "../../utlis/form/formData";
-import Button, {BUTTON_TYPE_CLASSES} from "../button/button.component";
+import Button from "../button/button.component";
 import {signInWithGooglePopup} from "../../utlis/firebase/firebase.utils";
 import {useDispatch} from "react-redux";
-import {registerUser, signInUser} from "../../redux/reducer/userSliceReducer";
+import {signInUser} from "../../redux/reducer/userSliceReducer";
+import "./sign-in.styles.scss"
 
 const SignInForm = () => {
     const dispatch = useDispatch()
@@ -22,7 +23,9 @@ const SignInForm = () => {
 
 
     return (
-        <div>
+        <div className='sign-in-container'>
+            <h2>Already have an account?</h2>
+            <span>Sign in with your email and password</span>
             <form onSubmit={handleSubmit(({email, password}) => dispatch(signInUser({email, password})))}>
                 <FormInput
                     inputOptions={{
@@ -44,16 +47,16 @@ const SignInForm = () => {
                     }}
 
                 />
-                <Button type={'submit'}>Sign In</Button>
+                <div className='buttons-container'>
+                    <Button type='submit'>Sign In</Button>
+                    <Button buttonType='google' type='button' onClick={signInWithGoogle}>
+                        Sign In With Google
+                    </Button>
+                </div>
 
             </form>
-            <Button
-                buttonType={BUTTON_TYPE_CLASSES.google}
-                type='button'
-                onClick={signInWithGoogle}
-            >
-                Sign In With Google
-            </Button>
+
+
 
 
         </div>
