@@ -7,17 +7,9 @@ import {yupResolver} from "@hookform/resolvers/yup";
 import {signUpDefaultValue, signUpSchema} from "../../utlis/form/formData";
 import {useDispatch} from "react-redux";
 import {registerUser} from "../../redux/reducer/userSliceReducer";
-
-
-const defaultFormFields = {
-    displayName: '',
-    email: '',
-    password: '',
-    confirmPassword: ''
-}
 const SignUpForm = () => {
     const dispatch = useDispatch();
-    const {handleSubmit, control, reset} = useForm({
+    const {handleSubmit, control} = useForm({
         resolver: yupResolver(signUpSchema),
 
     })

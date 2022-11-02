@@ -12,10 +12,7 @@ import {
 const ProductCard = ({product}) => {
     const dispatch = useDispatch();
     const {imageUrl, name, price} = product;
-    const cartItem = useSelector(state => selectCartProductById(state, product.id));
-
-
-
+    useSelector(state => selectCartProductById(state, product.id));
     return (
         <div className={"product-card-container"}>
             <img src={imageUrl} alt={name}/>

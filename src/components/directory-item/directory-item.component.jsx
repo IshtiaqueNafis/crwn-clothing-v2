@@ -1,10 +1,6 @@
 import './directory-item.styles.scss'
 import {Link} from "react-router-dom";
-/*
-  <Link className='nav-link' to='/shop'>
-                        SHOP
-                    </Link>
- */
+
 const DirectoryItem = ({category}) => {
     const {imageUrl, title} = category;
     return (

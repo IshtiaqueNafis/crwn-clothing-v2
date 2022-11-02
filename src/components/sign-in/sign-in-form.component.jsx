@@ -11,7 +11,7 @@ import "./sign-in.styles.scss"
 
 const SignInForm = () => {
     const dispatch = useDispatch()
-    const {handleSubmit, control, formState: {errors}, reset} = useForm({
+    const {handleSubmit, control} = useForm({
         mode: "all",
         resolver: yupResolver(signInSchema),
 
@@ -55,8 +55,6 @@ const SignInForm = () => {
                 </div>
 
             </form>
-
-
 
 
         </div>
