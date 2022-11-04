@@ -7,10 +7,11 @@ import "./category.styles.scss"
 
 const Category = () => {
     const {category} = useParams();
+    console.log({category})
     const dispatch = useDispatch();
     const {loading} = useSelector(state => state.categories);
-
-    const categoryProduct = useSelector(state => categorySelector.selectById(state, category));
+    const categoryParams = category.charAt(0).toUpperCase() + category.slice(1);
+    const categoryProduct = useSelector(state => categorySelector.selectById(state, categoryParams));
 
 
     useEffect(() => {
@@ -30,7 +31,7 @@ const Category = () => {
                 <h2 className={"category-title"}>{category.toUpperCase()}</h2>
                 <div className={'category-container'}>
 
-                    {categoryProduct?.data.map(product=>(
+                    {categoryProduct?.categoryItems.map(product=>(
                         <ProductCard key={product.id} product={product}/>
                     ))}
 

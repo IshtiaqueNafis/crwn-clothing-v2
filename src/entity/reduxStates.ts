@@ -3,3 +3,4 @@ export interface cartState{
     cartTotal: number;
     isCartOpen:boolean
 }
+

@@ -1,13 +1,16 @@
 import {createAsyncThunk, createEntityAdapter, createSlice} from "@reduxjs/toolkit";
-import {getCategoriesAndDocuments} from "../../utlis/firebase/firebase.utils";
+import {SHOP_DATA} from "../../data";
 
 export const retrieveCategoryMap = createAsyncThunk(
     'category/retriveCategory',
     async ({category = "All"}, thunkApi) => {
         try {
-
-            const data= await getCategoriesAndDocuments(category);
-            console.log({data})
+            console.log({category})
+            let data = SHOP_DATA
+            if (category !== "All") {
+                console.log(category.charAt(0).toUpperCase() + category.slice(1))
+                data = SHOP_DATA.filter(d => d.title === category.charAt(0).toUpperCase() + category.slice(1));
+            }
             return data;
 
 
@@ -18,16 +21,11 @@ export const retrieveCategoryMap = createAsyncThunk(
 )
 
 
-
 const categoryAdapter = createEntityAdapter({
-    selectId: category => category.id
-
-
+    selectId: category => category.title
 
 
 })
-
-
 
 
 export const categorySlice = createSlice({
@@ -43,10 +41,12 @@ export const categorySlice = createSlice({
     extraReducers: builder => {
         builder.addCase(retrieveCategoryMap.fulfilled, (state, {payload}) => {
 
+
             state.loading = false;
             state.error = null;
-
-            categoryAdapter.setAll(state,payload)
+            console.log({payload})
+            const data = payload.map(p => ({title: p.title,categoryItems:p.items}));
+            categoryAdapter.setAll(state, data)
 
 
         });

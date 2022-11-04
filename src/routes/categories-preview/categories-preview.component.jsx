@@ -13,19 +13,19 @@ const CategoriesPreview = () => {
         dispatch(retrieveCategoryMap({category: "All"}))
     }, [dispatch])
 
-
+    console.log(categories)
     return (
         <>
             {!loading && (
                 Object.keys(categories).map(title => {
 
-                   const products = categories[title].data;
+                   const products = categories[title].categoryItems;
                     return <CategoryPreview key={title} products={products} title={title}/>
                 })
 
 
             )}
-
+<h1>hi</h1>
         </>
     );
 };
