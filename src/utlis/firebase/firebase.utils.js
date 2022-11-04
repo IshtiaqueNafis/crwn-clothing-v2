@@ -71,8 +71,8 @@ export const createUserDocumentFromAuth = async (userAuth, additionalInformation
 
 
 
-export const getDataFromSnapshot = async (userdocRef) => {
-    return (await getDoc(userdocRef)).data();
+export const getDataFromSnapshot = async (userDocRef) => {
+    return (await getDoc(userDocRef)).data();
 
 
 }
