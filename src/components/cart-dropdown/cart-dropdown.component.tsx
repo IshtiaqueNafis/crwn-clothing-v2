@@ -5,6 +5,7 @@ import {useSelector} from "react-redux";
 import CartItem from "../cart-item/cart-item.component";
 import {selectAllCartProducts} from "../../redux/reducer/cartSliceReducer";
 import "./cart-dropdown.styles.scss"
+import {products} from "../../entity/models";
 
 
 const CartDropDown = () => {
@@ -13,7 +14,7 @@ const CartDropDown = () => {
     const goToCheckoutHandler = () => {
         navigate("/checkout");
     }
-    const cartItems = useSelector(selectAllCartProducts);
+    const cartItems:products[] = useSelector(selectAllCartProducts);
 
     return (
         <div className='cart-dropdown-container'>
@@ -26,7 +27,7 @@ const CartDropDown = () => {
                     <span className='empty-message'>Your cart is empty</span>
                 )}
             </div>
-            <Button onClick={goToCheckoutHandler}>GO TO CHECKOUT</Button>
+            <Button onClick={goToCheckoutHandler} buttonType={"inverted"}>GO TO CHECKOUT</Button>
         </div>
     );
 };

@@ -1,7 +1,14 @@
 import React from 'react';
 import "./cart-item.styles.scss"
+import {products} from "../../entity/models";
 
-const CartItem = ({cartItem: {imageUrl, name, price, quantity}}) => {
+
+interface cartItemProps{
+    cartItem:products
+}
+
+
+const CartItem = ( {cartItem: {imageUrl, name, price, quantity}}:cartItemProps) => {
     return (
         <div className={'cart-item-container'}>
             <img src={imageUrl} alt={`${name}`}/>

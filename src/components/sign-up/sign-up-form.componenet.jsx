@@ -72,7 +72,7 @@ const SignUpForm = () => {
                     }}
                 />
 
-                <Button type={'submit'}>Sign Up</Button>
+                <Button type={'submit'} buttonType={'inverted'}>Sign Up</Button>
             </form>
         </div>
     );
