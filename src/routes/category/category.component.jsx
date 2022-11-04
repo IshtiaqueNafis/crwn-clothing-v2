@@ -9,9 +9,9 @@ const Category = () => {
     const {category} = useParams();
     const dispatch = useDispatch();
     const {loading} = useSelector(state => state.categories);
-    console.log({category})
+
     const categoryProduct = useSelector(state => categorySelector.selectById(state, category));
-    console.log({categoryProduct})
+
 
     useEffect(() => {
         

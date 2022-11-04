@@ -1,4 +1,4 @@
-export interface products{
+export interface products {
     imageUrl: string;
     price: number;
     name: string;
@@ -6,5 +6,9 @@ export interface products{
     quantity?: number;
 }
 
-
+export type category= {
+    title: string,
+    imageUrl: string
+    items: products[]
+}
 

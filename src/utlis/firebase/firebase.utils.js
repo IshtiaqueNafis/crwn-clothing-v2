@@ -69,8 +69,6 @@ export const createUserDocumentFromAuth = async (userAuth, additionalInformation
 };
 
 
-
-
 export const getDataFromSnapshot = async (userDocRef) => {
     return (await getDoc(userDocRef)).data();
 
@@ -113,7 +111,10 @@ export const onAuthStateChangeListener = (callback) => {
 }
 
 //region *** addCollectionDocuments -->seed firebase data ***
-export const addCollectionDocuments = async (collectionKey, objectsToAdd) => {
+
+
+
+export const addCollectionDocuments = async (collectionKey, objectsToAdd)=> {
     const collectionRef = collection(db, collectionKey); // db is the firestore, collectionKey is for the name of the database name.
     const batch = writeBatch(db); // pass the firestore.
 
@@ -126,17 +127,19 @@ export const addCollectionDocuments = async (collectionKey, objectsToAdd) => {
 }
 //endregion
 
-export const getCategoriesAndDocuments = async (category = "") => {
+export const getCategoriesAndDocuments = async (category = "all") => {
 
     const collectionRef = collection(db, "categories");
     let q = null;
-    if (category.length > 0) {
-        q = query(collection(db, "categories"), where("title", "==", capitalize(category)))
+    if (category!=="All") {
+        const categorySearchTerm= category.charAt(0).toUpperCase() + category.slice(1)
+        q = query(collection(db, "categories"), where("title", "==", categorySearchTerm))
     } else {
         q = query(collectionRef);
     }
 
 
     const querySnapshot = await getDocs(q)
-    return  querySnapshot.docs.map(doc => ({data: doc.data().items, categoryId: doc.data().title.toLowerCase()}));
+    querySnapshot.docs.map(doc => console.log(doc.data()));
+    return querySnapshot.docs.map(doc => (doc.data()));
 }

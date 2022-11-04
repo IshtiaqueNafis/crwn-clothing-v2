@@ -10,7 +10,7 @@ const CategoriesPreview = () => {
 
     const dispatch = useDispatch();
     useEffect(() => {
-        dispatch(retrieveCategoryMap({category: ""}))
+        dispatch(retrieveCategoryMap({category: "All"}))
     }, [dispatch])
 
 

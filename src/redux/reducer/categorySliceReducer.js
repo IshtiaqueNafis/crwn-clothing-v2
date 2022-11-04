@@ -3,10 +3,12 @@ import {getCategoriesAndDocuments} from "../../utlis/firebase/firebase.utils";
 
 export const retrieveCategoryMap = createAsyncThunk(
     'category/retriveCategory',
-    async ({category = ""}, thunkApi) => {
+    async ({category = "All"}, thunkApi) => {
         try {
 
-            return await getCategoriesAndDocuments(category);
+            const data= await getCategoriesAndDocuments(category);
+            console.log({data})
+            return data;
 
 
         } catch (e) {
@@ -18,7 +20,7 @@ export const retrieveCategoryMap = createAsyncThunk(
 
 
 const categoryAdapter = createEntityAdapter({
-    selectId: category => category.categoryId
+    selectId: category => category.id
 
 
 
@@ -43,6 +45,7 @@ export const categorySlice = createSlice({
 
             state.loading = false;
             state.error = null;
+
             categoryAdapter.setAll(state,payload)
 
 
