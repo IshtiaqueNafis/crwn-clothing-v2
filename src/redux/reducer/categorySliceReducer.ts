@@ -3,12 +3,16 @@ import {categories} from "../../entity/models";
 import {RootState} from "../store/store";
 import {getCategoriesAndDocuments} from "../../utlis/firebase/firebase.utils";
 
+interface categoryState {
+    loading: boolean;
+    error: null | string
+}
 
 
 export const retrieveCategoryMap = createAsyncThunk<categories[], string>(
     'category/retrieveCategory',
 // @ts-ignore
-    async (title:string, thunkApi) => {
+    async (title: string, thunkApi) => {
         try {
             const data = await getCategoriesAndDocuments();
             console.log({data})
@@ -29,11 +33,10 @@ const categoryAdapter = createEntityAdapter<categories>({
 
 export const categorySlice = createSlice({
     name: "categories",
-    initialState: categoryAdapter.getInitialState({
+    initialState: categoryAdapter.getInitialState<categoryState>({
         loading: false,
-        error: "",
-        products: {},
-        categoriesMap: {}
+        error: null
+
 
     }),
     reducers: {},
