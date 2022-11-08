@@ -1,3 +1,5 @@
+import { string } from "yup";
+
 export interface products {
     imageUrl: string;
     price: number;
@@ -6,9 +8,14 @@ export interface products {
     quantity?: number;
 }
 
-export type category= {
+export type categories = {
     title: string,
-    imageUrl: string
+    imageUrl?: string
     items: products[]
+}
+
+export interface params{
+    title: string
+
 }
 

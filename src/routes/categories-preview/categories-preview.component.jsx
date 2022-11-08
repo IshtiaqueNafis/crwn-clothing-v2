@@ -10,7 +10,7 @@ const CategoriesPreview = () => {
 
     const dispatch = useDispatch();
     useEffect(() => {
-        dispatch(retrieveCategoryMap({category: "All"}))
+        dispatch(retrieveCategoryMap("All"))
     }, [dispatch])
 
     console.log(categories)
@@ -19,7 +19,7 @@ const CategoriesPreview = () => {
             {!loading && (
                 Object.keys(categories).map(title => {
 
-                   const products = categories[title].categoryItems;
+                   const products = categories[title]?.items
                     return <CategoryPreview key={title} products={products} title={title}/>
                 })
 

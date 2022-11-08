@@ -6,7 +6,7 @@ import {cartReducer} from "../reducer/cartSliceReducer";
 import storage from 'redux-persist/lib/storage';
 import {persistReducer} from "redux-persist";
 import {TypedUseSelectorHook, useDispatch, useSelector} from "react-redux";
-
+import thunk from "redux-thunk";
 const persistConfig = {
     key: 'root',
     storage,
@@ -28,6 +28,6 @@ export const store = configureStore({
 })
 
 export type AppDispatch = typeof store.dispatch;
-export const useAppDispatch: () => AppDispatch = useDispatch
+export const useAppDispatch = () => useDispatch<AppDispatch>()
 export type RootState = ReturnType<typeof store.getState>;
 export const useAppSelector: TypedUseSelectorHook<RootState> = useSelector;
