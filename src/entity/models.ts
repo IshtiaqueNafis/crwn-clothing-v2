@@ -6,18 +6,13 @@ export interface products {
     quantity?: number;
 }
 
-export type categories = {
+export interface categories  {
     id?: number;
     title: string,
     imageUrl?: string
     items?: products[]
 }
 
-export interface params {
-    title: string
-
-
-}
 
 export interface signInparams {
     email: string,
@@ -32,10 +27,5 @@ export interface userInfo {
 export interface registerParams {
     email: string,
     password: string,
-    displayName: string
-}
-
-export interface setUser {
-    email: string,
     displayName: string
 }

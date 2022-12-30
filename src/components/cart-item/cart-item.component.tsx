@@ -9,7 +9,6 @@ interface cartItemProps {
 
 
 const CartItem = ({cartItem}: cartItemProps) => {
-    console.log({cartItem})
     return (
         <div className={'cart-item-container'}>
             <img src={cartItem?.imageUrl} alt={`${cartItem?.name}`}/>

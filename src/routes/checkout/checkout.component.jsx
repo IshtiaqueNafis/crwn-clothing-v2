@@ -1,13 +1,13 @@
 import React, {useEffect} from 'react';
 import "./checkout.styles.scss"
-import {useSelector} from "react-redux";
 import CheckoutItem from "../../components/checkout-item/checkout-item.component";
 import {selectAllCartProducts} from "../../redux/reducer/cartSliceReducer";
 import PaymentForm from "../../components/payment-form/payment-form.component";
+import {useAppSelector} from "../../redux/store/store";
 
 const CheckOut = () => {
-    const {cartTotal} = useSelector(state => state.carts);
-    const cartItems = useSelector(selectAllCartProducts);
+    const {cartTotal} = useAppSelector(state => state.carts);
+    const cartItems = useAppSelector(selectAllCartProducts);
 
     useEffect(() => {
 
@@ -34,7 +34,7 @@ const CheckOut = () => {
             </div>
             {cartItems.map((cartItem) =>
                 (
-                    <CheckoutItem key={cartItem.id} cartItem={cartItem}/>
+                    <CheckoutItem key={cartItem.id} product={cartItem}/>
                 ))}
             <span className={'total'}> Total:${cartTotal}</span>
             <PaymentForm/>

@@ -26,4 +26,6 @@ const Button = ({children, isLoading, buttonType, ...otherProps}: ButtonProps) =
     );
 };
 
+
+
 export default Button;

@@ -2,7 +2,7 @@ import {createAsyncThunk, createSlice, isAnyOf} from "@reduxjs/toolkit";
 import {
     createAuthUserWithEmailAndPassword,
     db,
-    retriveDocumentFromDatabase,
+    retrieveDocumentFromDatabase,
     signInAuthWithEmailAndPassword,
     signOutUser,
     user
@@ -54,6 +54,7 @@ export const registerUser = createAsyncThunk<void, registerParams>(
             if (!res) {
                 thunkApi.rejectWithValue("email already taken")
             }
+
             const createdAt = new Date();
             await setDoc(doc(db, "users", res!.user!.uid), {
                 email,
@@ -68,24 +69,18 @@ export const registerUser = createAsyncThunk<void, registerParams>(
 );
 
 export const setUser = createAsyncThunk<userInfo, string>(
-    "userslice/setUser",
+    "userSlice/setUser",
 // @ts-ignore
     async (uid, thunkApi) => {
 
-
         try {
-            return await retriveDocumentFromDatabase(uid) as userInfo;
+            return await retrieveDocumentFromDatabase(uid) as userInfo;
         } catch (e) {
-
+            return thunkApi.rejectWithValue(e);
         }
 
-    }, {
-        condition: () => {
-            if (!user) {
-                return;
-            }
-        }
     }
+
 )
 
 
@@ -94,7 +89,6 @@ export const userSlice = createSlice({
         initialState: <userState>({currentUser: null, loading: false, error: null}),
         reducers: {},
         extraReducers: builder => {
-
 
             builder.addCase(signOutUserAsync.fulfilled, (state, action) => {
                 state.loading = false;

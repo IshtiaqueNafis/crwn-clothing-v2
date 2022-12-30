@@ -101,7 +101,7 @@ export const createUserDocumentFromAuth = async (userAuth: User, additionalInfor
 //
 //
 // }
-export const retriveDocumentFromDatabase = async (uid: string) => {
+export const retrieveDocumentFromDatabase = async (uid: string) => {
     const userDocRef = doc(db, 'users', uid);
     const userSnapshot = await getDoc(userDocRef);
     if (!userSnapshot.exists()) {
