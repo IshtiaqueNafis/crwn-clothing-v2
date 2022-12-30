@@ -9,24 +9,23 @@ import {useDispatch} from "react-redux";
 import {useEffect} from "react";
 import {createUserDocumentFromAuth, onAuthStateChangeListener} from "./utlis/firebase/firebase.utils";
 import {setUser} from "./redux/reducer/userSliceReducer";
-//https://stackoverflow.com/questions/66950349/onauthstatechanged-being-called-too-early
+
 
 const App = () => {
     const dispatch = useDispatch();
     useEffect(() => {
 
-           onAuthStateChangeListener( async user => {
-               if (user) {
+        onAuthStateChangeListener(async user => {
+            if (user) {
 
-                   if (user.providerData[0].providerId === "google.com") {
-                       await createUserDocumentFromAuth(user);
-                       dispatch(setUser({uid:user.uid}))
-                   }else {
-                       dispatch(setUser({uid:user.uid}))
-                   }
-               }
-           })
-
+                if (user.providerData[0].providerId === "google.com") {
+                    await createUserDocumentFromAuth(user);
+                    dispatch(setUser({uid: user.uid}))
+                } else {
+                    dispatch(setUser({uid: user.uid}))
+                }
+            }
+        })
 
 
     }, [dispatch])

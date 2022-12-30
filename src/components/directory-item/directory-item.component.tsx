@@ -1,19 +1,25 @@
 import './directory-item.styles.scss'
 import {Link} from "react-router-dom";
+import {categories} from "../../entity/models";
 
-const DirectoryItem = ({category}) => {
-    const {imageUrl, title} = category;
+interface Props {
+   category:categories
+}
+
+
+const DirectoryItem = ({category}:Props) => {
+
     return (
         <div className='directory-item-container'>
             <div
                 className='background-image'
                 style={{
-                    backgroundImage: `url(${imageUrl})`,
+                    backgroundImage: `url(${category.imageUrl})`,
                 }}
             />
             <div className='body'>
-                <h2>{title.toUpperCase()}</h2>
-                <Link to={`/shop/${title}`}>Shop Now</Link>
+                <h2>{category.title.toUpperCase()}</h2>
+                <Link to={`/shop/${category.title}`}>Shop Now</Link>
             </div>
         </div>
     );

@@ -2,11 +2,12 @@ import React, {useEffect} from 'react';
 import {ReactComponent as ShoppingIcon} from "../../assests/shopping-bag (1).svg";
 import "./cart-icon.styles.scss"
 import {setCartOpen} from "../../redux/reducer/cartSliceReducer";
-import {useDispatch, useSelector} from "react-redux";
+import {useAppDispatch, useAppSelector} from "../../redux/store/store";
 
 const CartIcon = () => {
-    const dispatch = useDispatch();
-    const {cartCount} = useSelector(state => state.carts);
+    const dispatch = useAppDispatch()
+    const {cartCount} = useAppSelector(state => state.carts);
+
 
     useEffect(() => {
     }, [cartCount])

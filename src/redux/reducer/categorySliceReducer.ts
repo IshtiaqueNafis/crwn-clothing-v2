@@ -12,7 +12,7 @@ interface categoryState {
 export const retrieveCategoryMap = createAsyncThunk<categories[], string>(
     'category/retrieveCategory',
 // @ts-ignore
-    async (title: string, thunkApi) => {
+    async (title="All", thunkApi) => {
         try {
             const data = await getCategoriesAndDocuments();
             console.log({data})

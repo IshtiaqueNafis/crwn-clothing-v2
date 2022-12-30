@@ -10,7 +10,7 @@ import {
 import {doc, setDoc} from "firebase/firestore";
 import {registerParams, signInparams, userInfo} from "../../entity/models";
 import firebase from "firebase/compat";
-import UserCredential = firebase.auth.UserCredential;
+
 
 interface userState {
     currentUser: null | userInfo;
@@ -37,7 +37,7 @@ export const signOutUserAsync = createAsyncThunk<void>(
         try {
             await signOutUser();
         } catch (e) {
-            return thunkApi.rejectWithValue(e.message)
+            return thunkApi.rejectWithValue(e)
         }
     }
 )
@@ -121,7 +121,7 @@ export const userSlice = createSlice({
                 });
             builder.addMatcher(isAnyOf(signInUser.rejected, registerUser.rejected, signOutUserAsync.rejected), (state, action) => {
                 state.loading = false;
-                state.error = action.payload;
+                console.log(action.payload)
             })
 
 

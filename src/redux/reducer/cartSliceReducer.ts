@@ -31,7 +31,6 @@ export const cartSlice = createSlice({
         },
 
         addCartItem: (state, action: PayloadAction<{ product: products; quantity:1 | -1| 0 }>) => {
-
             const {product, quantity} = action.payload;
             const productExists = cartAdapter.getSelectors().selectById(state, product.id);
             if (!productExists) {

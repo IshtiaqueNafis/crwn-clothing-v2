@@ -2,9 +2,14 @@ import React from 'react';
 import "./category-preview.styles.scss"
 import ProductCard from "../product-card/product-card.componenet";
 import {Link} from "react-router-dom";
+import {categories, products} from "../../entity/models";
+interface Props{
+    title:string
+    items:products[] | undefined
+}
 
-const CategoryPreview = ({title, products}) => {
 
+const CategoryPreview = ({title,items}:Props) => {
     return (
         <div className={'category-preview-container'}>
             <h2>
@@ -15,7 +20,7 @@ const CategoryPreview = ({title, products}) => {
             </h2>
             <div className={'preview'}>
                 {
-                    products.filter((_, idx) => (
+                   items?.filter((_, idx) => (
                         idx < 4
                     )).map(product =>
                         <ProductCard key={product.id} product={product}/>)

@@ -7,9 +7,10 @@ export interface products {
 }
 
 export type categories = {
+    id?: number;
     title: string,
     imageUrl?: string
-    items: products[]
+    items?: products[]
 }
 
 export interface params {
@@ -34,7 +35,7 @@ export interface registerParams {
     displayName: string
 }
 
-export interface setUser{
-    email:string,
+export interface setUser {
+    email: string,
     displayName: string
 }

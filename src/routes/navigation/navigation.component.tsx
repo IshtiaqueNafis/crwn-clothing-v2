@@ -2,15 +2,15 @@ import React, {useEffect} from 'react';
 import {Link, Outlet} from "react-router-dom";
 import {ReactComponent as CrwnLogo} from "../../assests/crown.svg";
 import './navigation.styles.scss'
-import {useDispatch, useSelector} from "react-redux";
 import {signOutUserAsync} from "../../redux/reducer/userSliceReducer";
 import CartIcon from "../../components/cart-icon/cart-icon.component";
 import CartDropDown from "../../components/cart-dropdown/cart-dropdown.component";
+import {useAppDispatch, useAppSelector} from "../../redux/store/store";
 
 const Navigation = () => {
-    const dispatch = useDispatch();
-    const {currentUser} = useSelector(state => state.userState);
-    const {isCartOpen} = useSelector(state => state.carts);
+    const dispatch = useAppDispatch();
+    const {currentUser} = useAppSelector(state => state.userState);
+    const {isCartOpen} = useAppSelector(state => state.carts);
     useEffect(() => {
 
     }, [currentUser])
@@ -26,7 +26,6 @@ const Navigation = () => {
                     <Link className='nav-link' to='/shop'>
                         SHOP
                     </Link>
-
 
 
                     {currentUser?.email ? (

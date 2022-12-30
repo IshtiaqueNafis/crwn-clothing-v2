@@ -3,18 +3,19 @@ import "./cart-item.styles.scss"
 import {products} from "../../entity/models";
 
 
-interface cartItemProps{
-    cartItem:products
+interface cartItemProps {
+    cartItem: products
 }
 
 
-const CartItem = ( {cartItem: {imageUrl, name, price, quantity}}:cartItemProps) => {
+const CartItem = ({cartItem}: cartItemProps) => {
+    console.log({cartItem})
     return (
         <div className={'cart-item-container'}>
-            <img src={imageUrl} alt={`${name}`}/>
+            <img src={cartItem?.imageUrl} alt={`${cartItem?.name}`}/>
             <div className={'item-details'}>
-                <span className={'name'}>{name}</span>
-                <span className={'price'}>{quantity} X ${price}</span>
+                <span className={'name'}>{cartItem?.name}</span>
+                <span className={'price'}>{cartItem?.quantity} X ${cartItem?.price}</span>
             </div>
         </div>
     );
