@@ -8,7 +8,8 @@ import {useAppDispatch, useAppSelector} from "../../redux/store/store";
 
 
 const Category = () => {
-    const {category} = useParams<{ category: string | "All" }>()
+    const {category} = useParams<{ category: string  }>()
+
     const dispatch = useAppDispatch();
 
     const {loading} = useAppSelector(state => state.categories);
@@ -22,7 +23,7 @@ const Category = () => {
         if (!categoryProduct) {
 
             // @ts-ignore
-            dispatch(retrieveCategoryMap({category}))
+            dispatch(retrieveCategoryMap(category))
         }
 
     }, [dispatch, category, categoryProduct])

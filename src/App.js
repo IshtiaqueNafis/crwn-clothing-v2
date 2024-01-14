@@ -4,10 +4,11 @@ import Navigation from "./routes/navigation/navigation.component";
 import Authentication from "./routes/authentication/authentication.component";
 import Shop from "./routes/shop/shop.component";
 import CheckOut from "./routes/checkout/checkout.component";
-import {useEffect} from "react";
+import React, {useEffect} from "react";
 import {createUserDocumentFromAuth, onAuthStateChangeListener} from "./utlis/firebase/firebase.utils";
 import {useAppDispatch} from "./redux/store/store";
 import {setUser} from "./redux/reducer/userSliceReducer";
+import Category from "./routes/category/category.component";
 
 
 const App = () => {
