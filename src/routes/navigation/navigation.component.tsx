@@ -27,11 +27,12 @@ const Navigation = () => {
                         SHOP
                     </Link>
 
+                    {currentUser?.displayName}
 
                     {currentUser?.email ? (
                         <span className='nav-link' onClick={() => dispatch(signOutUserAsync())}>
-              {' '}
                             SIGN OUT{' '}
+
             </span>
                     ) : (
                         <Link className='nav-link' to='/auth'>
