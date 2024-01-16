@@ -6,7 +6,6 @@ import "./category.styles.scss"
 import {useAppDispatch, useAppSelector} from "../../redux/store/store";
 
 
-
 const Category = () => {
     const {category} = useParams<{ category: string  }>()
 

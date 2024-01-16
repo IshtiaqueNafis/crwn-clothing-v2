@@ -1,6 +1,4 @@
 import React, {useEffect} from 'react';
-
-import {useDispatch, useSelector} from "react-redux";
 import {categorySelector, retrieveCategoryMap} from "../../redux/reducer/categorySliceReducer";
 import CategoryPreview from "../../components/category-preview/category-preview.component";
 import {useAppDispatch, useAppSelector} from "../../redux/store/store";

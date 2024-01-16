@@ -8,7 +8,6 @@ import React, {useEffect} from "react";
 import {createUserDocumentFromAuth, onAuthStateChangeListener} from "./utlis/firebase/firebase.utils";
 import {useAppDispatch} from "./redux/store/store";
 import {setUser} from "./redux/reducer/userSliceReducer";
-import Category from "./routes/category/category.component";
 
 
 const App = () => {

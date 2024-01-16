@@ -4,12 +4,10 @@ import {
     db,
     retrieveDocumentFromDatabase,
     signInAuthWithEmailAndPassword,
-    signOutUser,
-    user
+    signOutUser
 } from "../../utlis/firebase/firebase.utils";
 import {doc, setDoc} from "firebase/firestore";
 import {registerParams, signInparams, userInfo} from "../../entity/models";
-import firebase from "firebase/compat";
 
 
 interface userState {

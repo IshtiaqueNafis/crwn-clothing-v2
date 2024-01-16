@@ -1,7 +1,6 @@
 import React from 'react';
 import "./product-card.styles.scss"
 import Button from "../button/button.component";
-import {useSelector} from "react-redux";
 import {addCartItem, selectCartProductById,} from "../../redux/reducer/cartSliceReducer";
 import {useAppDispatch, useAppSelector} from "../../redux/store/store";
 import {products} from "../../entity/models";

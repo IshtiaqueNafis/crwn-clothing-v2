@@ -2,7 +2,8 @@ import React from 'react';
 import "./category-preview.styles.scss"
 import ProductCard from "../product-card/product-card.componenet";
 import {Link} from "react-router-dom";
-import {categories, products} from "../../entity/models";
+import {products} from "../../entity/models";
+
 interface Props{
     title:string
     items:products[] | undefined
