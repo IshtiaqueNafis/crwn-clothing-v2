@@ -1,14 +1,15 @@
-import {createAsyncThunk, createSlice, isAnyOf} from "@reduxjs/toolkit";
+import { createAsyncThunk, createSlice, isAnyOf } from "@reduxjs/toolkit";
 import {
     createAuthUserWithEmailAndPassword,
     db,
     retrieveDocumentFromDatabase,
     signInAuthWithEmailAndPassword,
-    signOutUser
+    signOutUser,
 } from "../../utlis/firebase/firebase.utils";
-import {doc, setDoc} from "firebase/firestore";
-import {registerParams, signInparams, userInfo} from "../../entity/models";
-
+import { doc, setDoc } from "firebase/firestore";
+import { registerParams, signInparams, userInfo } from "../../entity/models";
+import firebase from "firebase/compat";
+import UserCredential = firebase.auth.UserCredential;
 
 interface userState {
     currentUser: null | userInfo;
@@ -20,14 +21,14 @@ interface userState {
 export const signInUser = createAsyncThunk<userInfo, signInparams>(
     "userSlice/signInUser",
     // @ts-ignore
-    async ({email, password}, thunkApi) => {
+    async ({ email, password }, thunkApi) => {
         try {
             await signInAuthWithEmailAndPassword(email, password);
         } catch (e) {
             return thunkApi.rejectWithValue(e);
         }
-    });
-
+    }
+);
 
 export const signOutUserAsync = createAsyncThunk<void>(
     "userSlice/signOutUser/",
@@ -35,31 +36,31 @@ export const signOutUserAsync = createAsyncThunk<void>(
         try {
             await signOutUser();
         } catch (e) {
-            return thunkApi.rejectWithValue(e)
+            return thunkApi.rejectWithValue(e);
         }
     }
-)
+);
 
 export const registerUser = createAsyncThunk<void, registerParams>(
-    'userSlice/registerUser',
-    async ({email, password = "", displayName = ""}, thunkApi) => {
-
+    "userSlice/registerUser",
+    async ({ email, password = "", displayName = "" }, thunkApi) => {
         try {
-
             // @ts-ignore
-            const res: UserCredential = await createAuthUserWithEmailAndPassword(email, password)
+            const res: UserCredential = await createAuthUserWithEmailAndPassword(
+                email,
+                password
+            );
 
             if (!res) {
-                thunkApi.rejectWithValue("email already taken")
+                thunkApi.rejectWithValue("email already taken");
             }
 
             const createdAt = new Date();
             await setDoc(doc(db, "users", res!.user!.uid), {
                 email,
                 displayName,
-                createdAt
-            })
-
+                createdAt,
+            });
         } catch (e) {
             return thunkApi.rejectWithValue(e);
         }
@@ -68,59 +69,57 @@ export const registerUser = createAsyncThunk<void, registerParams>(
 
 export const setUser = createAsyncThunk<userInfo, string>(
     "userSlice/setUser",
-// @ts-ignore
     async (uid, thunkApi) => {
-
         try {
-            return await retrieveDocumentFromDatabase(uid) as userInfo;
+            return (await retrieveDocumentFromDatabase(uid)) as userInfo;
         } catch (e) {
             return thunkApi.rejectWithValue(e);
-        }
-
-    }
-
-)
-
-
-export const userSlice = createSlice({
-        name: 'UserSlice',
-        initialState: <userState>({currentUser: null, loading: false, error: null}),
-        reducers: {},
-        extraReducers: builder => {
-
-            builder.addCase(signOutUserAsync.fulfilled, (state, action) => {
-                state.loading = false;
-                state.error = null;
-                state.currentUser = null;
-            });
-            builder.addCase(setUser.fulfilled, (state, action) => {
-                state.loading = false;
-                state.currentUser = action.payload;
-                state.error = null;
-            })
-            builder.addCase(registerUser.fulfilled, (state, action) => {
-                state.loading = false;
-                state.error = null;
-            })
-            builder.addCase(signInUser.fulfilled, (state, action) => {
-                state.loading = false;
-                state.error = null;
-            });
-            builder.addMatcher(isAnyOf(signInUser.pending, registerUser.pending, signOutUserAsync.pending),
-                (state, action) => {
-                    state.loading = true;
-                    state.error = null;
-                });
-            builder.addMatcher(isAnyOf(signInUser.rejected, registerUser.rejected, signOutUserAsync.rejected), (state, action) => {
-                state.loading = false;
-                console.log(action.payload)
-            })
-
-
         }
     }
 );
 
+export const userSlice = createSlice({
+    name: "UserSlice",
+    initialState: {
+        currentUser: null,
+        loading: false,
+        error: null,
+    } as userState,
+    reducers: {},
+    extraReducers: (builder) => {
+        builder.addCase(signOutUserAsync.fulfilled, (state, action) => {
+            state.loading = false;
+            state.error = null;
+            state.currentUser = null;
+        });
+        builder.addCase(setUser.fulfilled, (state, action) => {
+            state.loading = false;
+            state.currentUser = action.payload;
+            state.error = null;
+        });
+        builder.addCase(registerUser.fulfilled, (state, action) => {
+            state.loading = false;
+            state.error = null;
+        });
+        builder.addCase(signInUser.fulfilled, (state, action) => {
+            state.loading = false;
+            state.error = null;
+        });
+        builder.addMatcher(
+            isAnyOf(signInUser.pending, registerUser.pending, signOutUserAsync.pending),
+            (state, action) => {
+                state.loading = true;
+                state.error = null;
+            }
+        );
+        builder.addMatcher(
+            isAnyOf(signInUser.rejected, registerUser.rejected, signOutUserAsync.rejected),
+            (state, action) => {
+                state.loading = false;
+                console.log(action.payload);
+            }
+        );
+    },
+});
+
 export const userReducer = userSlice.reducer;
-
-
